@@ -50,10 +50,14 @@ final class NF_Session_Add_On_Actions_SaveToSession extends NF_Abstracts_Action
                 $wp_session[self::$sessionPrefix . $field['key']] = $field['value'];
 
                 // Add option information to the session
-                $matchingOptions = array_filter($field['options'], function($option) use ($field) {
-                    return $field['value'] == $option['value'];
-                });
-                $selectedOption = count($matchingOptions) == 1 ? array_pop($matchingOptions) : false;
+                if (isset($field['options']) && is_array($field['options'])) {
+                    $matchingOptions = array_filter($field['options'], function($option) use ($field) {
+                        return $field['value'] == $option['value'];
+                    });
+                    $selectedOption = count($matchingOptions) == 1 ? array_pop($matchingOptions) : false;
+                } else {
+                    $selectedOption = false;
+                }
                 if ($selectedOption && isset($selectedOption['calc'])) {
                     $wp_session[self::$sessionPrefix . $field['key'] . ':calc'] = $selectedOption['calc'];
                 }
