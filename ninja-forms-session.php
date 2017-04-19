@@ -4,7 +4,7 @@
  * Plugin Name: Ninja Forms - Session
  * Plugin URI: http://github.com/isleshocky77/ninja-forms-session
  * Description: Add ability to Save for values to the Session and pull them back using MergeTags
- * Version: 3.0.1
+ * Version: 3.0.2
  * Requires at least: 4.3
  * Tested up to: 4.7
  * Author: Stephen Ostrow <stephen@ostrow.tech>
@@ -27,7 +27,7 @@ if( version_compare( get_option( 'ninja_forms_version', '0.0.0' ), '3', '<' ) ||
      */
     final class NF_Session_Add_On
     {
-        const VERSION = '3.0.1';
+        const VERSION = '3.0.2';
         const SLUG    = 'session';
         const NAME    = 'Session';
         const AUTHOR  = 'Stephen Ostrow ';
