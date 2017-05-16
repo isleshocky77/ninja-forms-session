@@ -46,24 +46,33 @@ final class NF_Session_Add_On_Actions_SaveToSession extends NF_Abstracts_Action
         $wp_session = \WP_Session::get_instance();
 
         foreach ($data['fields'] as $field) {
-            if (isset($field['manual_key']) && $field['manual_key'] && isset($field['key'])) {
-                $wp_session[self::$sessionPrefix . $field['key']] = $field['value'];
+            // If Conditionally hidden, don't set session
+            if (isset($field['visible']) && $field['visible'] === false) {
+                continue;
+            }
 
-                // Add option information to the session
-                if (isset($field['options']) && is_array($field['options'])) {
-                    $matchingOptions = array_filter($field['options'], function($option) use ($field) {
-                        return $field['value'] == $option['value'];
-                    });
-                    $selectedOption = count($matchingOptions) == 1 ? array_pop($matchingOptions) : false;
-                } else {
-                    $selectedOption = false;
-                }
-                if ($selectedOption && isset($selectedOption['calc'])) {
-                    $wp_session[self::$sessionPrefix . $field['key'] . ':calc'] = $selectedOption['calc'];
-                }
-                if ($selectedOption && isset($selectedOption['label'])) {
-                    $wp_session[self::$sessionPrefix . $field['key'] . ':label'] = $selectedOption['label'];
-                }
+            // If doesn't have a key specified, don't set session
+            if (!isset($field['manual_key']) || !$field['manual_key'] || !isset($field['key'])) {
+                continue;
+            }
+
+            // Set Session Key for value
+            $wp_session[self::$sessionPrefix . $field['key']] = $field['value'];
+
+            // Add option information to the session
+            if (isset($field['options']) && is_array($field['options'])) {
+                $matchingOptions = array_filter($field['options'], function($option) use ($field) {
+                    return $field['value'] == $option['value'];
+                });
+                $selectedOption = count($matchingOptions) == 1 ? array_pop($matchingOptions) : false;
+            } else {
+                $selectedOption = false;
+            }
+            if ($selectedOption && isset($selectedOption['calc'])) {
+                $wp_session[self::$sessionPrefix . $field['key'] . ':calc'] = $selectedOption['calc'];
+            }
+            if ($selectedOption && isset($selectedOption['label'])) {
+                $wp_session[self::$sessionPrefix . $field['key'] . ':label'] = $selectedOption['label'];
             }
         }
 
