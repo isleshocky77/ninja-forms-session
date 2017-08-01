@@ -35,6 +35,28 @@ final class NF_Session_Add_On_MergeTags_Session extends NF_Abstracts_MergeTags
         }
     }
 
+    public function replace( $subject )
+    {
+        $subject = parent::replace( $subject );
+
+        if (is_string($subject)) {
+            preg_match_all("/{session:(.*?)}/", $subject, $matches );
+        }
+
+        if ( ! isset( $matches ) || ! is_array( $matches ) ) return $subject;
+
+        /**
+         * $matches[0][$i]  merge tag match     {post_meta:foo}
+         * $matches[1][$i]  captured meta key   foo
+         */
+        foreach( $matches[0] as $i => $search ){
+            // Replace unused querystring merge tags.
+            $subject = str_replace( $matches[0][$i], '', $subject );
+        }
+
+        return $subject;
+    }
+
     public function __call($name, $arguments)
     {
         return $this->merge_tags[ $name ][ 'value' ];
