@@ -23,6 +23,7 @@ final class NF_Session_Add_On_MergeTags_Session extends NF_Abstracts_MergeTags
 
         add_filter( 'ninja_forms_render_options', [ $this, 'session_default' ], 10, 2 );
 
+        \Ninja_Forms()->session();
         $wp_session = \WP_Session::get_instance();
 
         foreach( $wp_session as $key => $value ){
